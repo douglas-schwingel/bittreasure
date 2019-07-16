@@ -25,7 +25,11 @@ public class Teste {
                 null, new ParameterizedTypeReference<List<Coin>>() {
                 });
         List<Coin> body = exchange.getBody();
-        return repository.save(body.get(0));
+        return repository.save(body.get(1));
+    }
+
+    public Coin find(String id) {
+        return repository.findById(id).get();
     }
 
 }
