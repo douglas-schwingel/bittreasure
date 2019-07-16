@@ -1,23 +1,40 @@
-plugins {
-	id 'org.springframework.boot' version '2.1.6.RELEASE'
-	id 'java'
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+buildscript {
+	repositories {
+		jcenter()
+		mavenCentral()
+	}
+	dependencies {
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE"
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE"
+	}
 }
 
-apply plugin: 'io.spring.dependency-management'
+subprojects {
+    apply plugin: 'java'
+	apply plugin: 'idea'
+    apply plugin: 'io.spring.dependency-management'
+    
+    group = 'br.com.bittreasure'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = JavaVersion.VERSION_11
 
-group = 'br.com.bittreasure'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = JavaVersion.VERSION_11
+    repositories {
+		mavenCentral()
+	}
 
-repositories {
-	mavenCentral()
-}
+	dependencyManagement {
+		imports {
+			mavenBom SpringBootPlugin.BOM_COORDINATES
+		}
+	}
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-data-couchbase'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok:1.18.8'
-	annotationProcessor 'org.projectlombok:lombok:1.18.8'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-actuator'
+		implementation 'org.springframework.boot:spring-boot-starter-data-couchbase'
+		compileOnly 'org.projectlombok:lombok:1.18.8'
+		annotationProcessor 'org.projectlombok:lombok:1.18.8'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	}
 }

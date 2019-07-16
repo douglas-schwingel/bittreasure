@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(':impl')
+    implementation project(':impl-br.com.bittreasure.v1.exchange')
+}
