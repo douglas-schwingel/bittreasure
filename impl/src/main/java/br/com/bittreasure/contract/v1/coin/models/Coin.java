@@ -4,6 +4,8 @@ import com.couchbase.client.java.repository.annotation.Id;
 import lombok.*;
 import org.springframework.data.couchbase.core.mapping.Document;
 
+import java.util.Map;
+
 @Document
 @Data
 @ToString(onlyExplicitlyIncluded = true)
@@ -26,5 +28,7 @@ public class Coin {
     private String is_active;
 
     private String type;
+
+    private Map<String, Double> precos;
 
 }

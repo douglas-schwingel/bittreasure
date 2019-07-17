@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CoinRepository extends CouchbaseRepository<Coin, String> {
 
+    Coin findAllByIdAndRankIsLessThanEqual(String id, Integer rank);
 }

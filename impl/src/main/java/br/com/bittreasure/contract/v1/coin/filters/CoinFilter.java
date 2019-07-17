@@ -9,7 +9,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class CoinFilter {
 
-    public static void verificaSeEhValido(String filter) {
+    public void filtra(String filter, String value) {
+        verificaSeEhValido(filter);
+
+    }
+
+    private void verificaSeEhValido(String filter) {
         try {
             ValidCoinFilters.valueOf(filter.toUpperCase());
 

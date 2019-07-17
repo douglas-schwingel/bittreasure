@@ -28,6 +28,7 @@ public class CoinService {
     }
 
     public Coin find(String id) {
+//        TODO decorator
         return repository.findById(id).get();
     }
 

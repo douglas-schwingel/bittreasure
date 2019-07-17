@@ -1,10 +1,9 @@
 package br.com.bittreasure.contract.v1.coin.controller;
 
-import br.com.bittreasure.contract.v1.coin.filters.CoinFilter;
-import br.com.bittreasure.contract.v1.coin.models.response.CompleteCoinResponse;
-import br.com.bittreasure.contract.v1.coin.models.response.SimplifiedCoinResponse;
 import br.com.bittreasure.contract.v1.coin.controller.facade.CoinControllerFacade;
 import br.com.bittreasure.contract.v1.coin.models.response.CoinResponse;
+import br.com.bittreasure.contract.v1.coin.models.response.CompleteCoinResponse;
+import br.com.bittreasure.contract.v1.coin.models.response.SimplifiedCoinResponse;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -67,7 +66,6 @@ public class CoinController {
 
                              @ApiParam(value = "CoinFilter by name", example = "BitCoin")
                              @RequestParam("value") @Nullable String value) {
-        CoinFilter.verificaSeEhValido(filter);
         return coinControllerFacade.find(id, filter, value);
     }
 
