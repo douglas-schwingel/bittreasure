@@ -4,6 +4,8 @@ import br.com.bittreasure.contract.v1.coin.controller.facade.CoinControllerFacad
 import br.com.bittreasure.contract.v1.coin.models.response.CoinResponse;
 import br.com.bittreasure.contract.v1.coin.models.response.CompleteCoinResponse;
 import br.com.bittreasure.contract.v1.coin.models.response.SimplifiedCoinResponse;
+import br.com.bittreasure.impl.exceptions.ApiException;
+import br.com.bittreasure.impl.exceptions.errors.ResponseError;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -40,9 +42,9 @@ public class CoinController {
     @ApiOperation(value = "Get Complete Coins", notes = "Get the complete coin version containing all the informations")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Coins retrivied", response = SimplifiedCoinResponse.class),
-            @ApiResponse(code = 403, message = "Method not allowed"),
-            @ApiResponse(code = 404, message = "Coins not found"),
-            @ApiResponse(code = 500, message = "Internal server error")
+            @ApiResponse(code = 403, message = "Method not allowed", response = ResponseError.class),
+            @ApiResponse(code = 404, message = "Coins not found", response = ResponseError.class),
+            @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @GetMapping("/complete")
     public CompleteCoinResponse getCompleteCoins() {
@@ -53,9 +55,10 @@ public class CoinController {
     @ApiOperation(value = "Get coin", notes = "Get coin information based on its id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Coin retrivied", response = CoinResponse.class),
-            @ApiResponse(code = 403, message = "Method not allowed"),
-            @ApiResponse(code = 404, message = "Coin not found"),
-            @ApiResponse(code = 500, message = "Internal server error")
+            @ApiResponse(code = 400, message = "Bad request", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Method not allowed", response = ResponseError.class),
+            @ApiResponse(code = 404, message = "Coin not found", response = ResponseError.class),
+            @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @GetMapping("/{id}")
     public CoinResponse find(@ApiParam(value = "Coin id", example = "btc-bitcon", required = true)
@@ -64,7 +67,7 @@ public class CoinController {
                              @ApiParam(value = "CoinFilter by name", example = "BitCoin")
                              @RequestParam("filter") @Nullable String filter,
 
-                             @ApiParam(value = "CoinFilter by name", example = "BitCoin")
+                             @ApiParam(value = "Filter value", example = "BitCoin")
                              @RequestParam("value") @Nullable String value) {
         return coinControllerFacade.find(id, filter, value);
     }
