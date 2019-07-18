@@ -2,9 +2,11 @@ package br.com.bittreasure.impl.exceptions.issues;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 @ApiModel
 public class Issue {
 
@@ -14,7 +16,7 @@ public class Issue {
     private String message;
 
     public Issue(Exception e) {
-        this.id = e.getClass().toString();
+        this.id = e.toString();
         this.message = e.getMessage();
     }
 }

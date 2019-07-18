@@ -1,9 +1,13 @@
 package br.com.bittreasure.contract.v1.coin.mapper;
 
 import br.com.bittreasure.contract.v1.coin.models.response.CompleteCoinResponse;
+import br.com.bittreasure.contract.v1.coin.models.response.ListSimplifiedCoinResponse;
+import br.com.bittreasure.contract.v1.coin.models.response.SimplifiedCoinResponse;
 import br.com.bittreasure.impl.coin.models.Coin;
 import br.com.bittreasure.contract.v1.coin.models.response.CoinResponse;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CoinMapper {
@@ -22,5 +26,19 @@ public class CoinMapper {
                 .is_active(coin.getIs_active())
                 .type(coin.getType())
                 .build();
+    }
+
+    public SimplifiedCoinResponse mapToSimplifiedCoinResponse(Coin coin) {
+        return SimplifiedCoinResponse.builder()
+                .id(coin.getId())
+                .name(coin.getName())
+                .is_active(coin.getIs_active())
+                .build();
+    }
+
+    public ListSimplifiedCoinResponse mapToListSimplifiedCoinResponse(List<Coin> list) {
+        var builder = ListSimplifiedCoinResponse.builder();
+        list.forEach(c -> builder.coin(mapToSimplifiedCoinResponse(c)));
+        return builder.build();
     }
 }

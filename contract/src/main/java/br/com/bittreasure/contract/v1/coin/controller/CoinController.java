@@ -3,8 +3,8 @@ package br.com.bittreasure.contract.v1.coin.controller;
 import br.com.bittreasure.contract.v1.coin.controller.facade.CoinControllerFacade;
 import br.com.bittreasure.contract.v1.coin.models.response.CoinResponse;
 import br.com.bittreasure.contract.v1.coin.models.response.CompleteCoinResponse;
+import br.com.bittreasure.contract.v1.coin.models.response.ListSimplifiedCoinResponse;
 import br.com.bittreasure.contract.v1.coin.models.response.SimplifiedCoinResponse;
-import br.com.bittreasure.impl.exceptions.ApiException;
 import br.com.bittreasure.impl.exceptions.errors.ResponseError;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class CoinController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get Complete Coins", notes = "Get the complete coin version containing all the informations")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Coins retrivied", response = SimplifiedCoinResponse.class),
+            @ApiResponse(code = 200, message = "Coins retrivied", response = CompleteCoinResponse.class),
             @ApiResponse(code = 403, message = "Method not allowed", response = ResponseError.class),
             @ApiResponse(code = 404, message = "Coins not found", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
@@ -72,5 +72,18 @@ public class CoinController {
         return coinControllerFacade.find(id, filter, value);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Get coin", notes = "Get coin information based on its id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Coins Saved", response = ListSimplifiedCoinResponse.class),
+            @ApiResponse(code = 400, message = "Bad request", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Method not allowed", response = ResponseError.class),
+            @ApiResponse(code = 404, message = "Coin not found", response = ResponseError.class),
+            @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
+    })
+    @PostMapping("/saveAll")
+    public ListSimplifiedCoinResponse saveAll() {
+        return coinControllerFacade.saveAll();
+    }
 
 }

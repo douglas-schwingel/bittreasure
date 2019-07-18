@@ -7,6 +7,7 @@ import br.com.bittreasure.impl.exceptions.issues.Issue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -24,6 +25,24 @@ public class ExceptionHandlers {
                 .body(new ResponseError(request.getRequestURI(), PT_BR, exception.getErrors()));
     }
 
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ResponseError> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception,
+                                                                                HttpServletRequest request) {
+        StandartError error = StandartError.builder()
+                .name(HttpStatus.METHOD_NOT_ALLOWED.name())
+                .status(HttpStatus.METHOD_NOT_ALLOWED.value())
+                .message("Method not allowed")
+                .issue(new Issue(exception))
+                .suggestedUserAction("Contact the developer")
+                .suggestedApplicationAction("This method is not supported here. Contact us")
+                .build();
+        return new ResponseEntity<>(ResponseError.builder()
+                .namespace(request.getRequestURI())
+                .language(PT_BR)
+                .error(error).build()
+                , HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseError> exception(Exception exception, HttpServletRequest request) {
         ApiException apiException = new ApiException(StandartError.builder()
@@ -38,4 +57,5 @@ public class ExceptionHandlers {
         return ResponseEntity.status(apiException.getErrors().get(0).getStatus())
                 .body(new ResponseError(request.getRequestURI(), PT_BR, apiException.getErrors()));
     }
+
 }

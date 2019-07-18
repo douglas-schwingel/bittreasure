@@ -39,4 +39,7 @@ public class CoinFacadeImpl {
         return service.teste();
     }
 
+    public List<Coin> saveAll() {
+        return service.saveAll();
+    }
 }

@@ -4,16 +4,22 @@ import br.com.bittreasure.impl.exchange.models.Exchange;
 import br.com.bittreasure.impl.exchange.services.ExchangeService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class ExchangeFacade {
+public class ExchangeFacadeImpl {
 
     private final ExchangeService service;
 
-    public ExchangeFacade(ExchangeService service) {
+    public ExchangeFacadeImpl(ExchangeService service) {
         this.service = service;
     }
 
-    public Exchange save() {
-        return service.save();
+    public Exchange find(String id) {
+        return service.find(id);
+    }
+
+    public List<Exchange> saveAll() {
+        return service.saveAll();
     }
 }
