@@ -1,7 +1,7 @@
 package br.com.bittreasure.contract.v1.exchange.controller.facade;
 
-import br.com.bittreasure.contract.v1.exchange.facades.ExchangeFacade;
-import br.com.bittreasure.contract.v1.exchange.models.Exchange;
+import br.com.bittreasure.impl.exchange.facades.ExchangeFacade;
+import br.com.bittreasure.impl.exchange.models.Exchange;
 import org.springframework.stereotype.Service;
 
 @Service

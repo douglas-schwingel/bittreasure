@@ -1,7 +1,7 @@
 package br.com.bittreasure.contract.v1.coin.mapper;
 
 import br.com.bittreasure.contract.v1.coin.models.response.CompleteCoinResponse;
-import br.com.bittreasure.contract.v1.coin.models.Coin;
+import br.com.bittreasure.impl.coin.models.Coin;
 import br.com.bittreasure.contract.v1.coin.models.response.CoinResponse;
 import org.springframework.stereotype.Service;
 

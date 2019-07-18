@@ -1,6 +1,6 @@
 package br.com.bittreasure.contract.v1.config;
 
-import br.com.bittreasure.contract.v1.exchange.models.Exchange;
+import br.com.bittreasure.impl.exchange.models.Exchange;
 import com.couchbase.client.java.Bucket;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

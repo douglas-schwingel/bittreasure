@@ -1,7 +1,7 @@
 package br.com.bittreasure.contract.v1.exchange.controller;
 
 import br.com.bittreasure.contract.v1.exchange.controller.facade.ExchangeControllerFacade;
-import br.com.bittreasure.contract.v1.exchange.models.Exchange;
+import br.com.bittreasure.impl.exchange.models.Exchange;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

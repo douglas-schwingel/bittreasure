@@ -1,9 +1,10 @@
 package br.com.bittreasure.contract.v1.coin.controller.facade;
 
-import br.com.bittreasure.contract.v1.coin.facades.CoinFacadeImpl;
+import br.com.bittreasure.impl.coin.facades.CoinFacadeImpl;
 import br.com.bittreasure.contract.v1.coin.mapper.CoinMapper;
 import br.com.bittreasure.contract.v1.coin.models.response.CoinResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -19,7 +20,7 @@ public class CoinControllerFacade {
     }
 
 
-    public CoinResponse find(String id, String filter, String value) {
+    public CoinResponse find(String id, @Nullable String filter, @Nullable  String value) {
         return mapper.mapToCoinResponse(facadeImpl.find(id, filter, value));
     }
 
