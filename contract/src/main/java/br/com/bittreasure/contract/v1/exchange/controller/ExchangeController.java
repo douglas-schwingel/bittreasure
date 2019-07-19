@@ -3,6 +3,7 @@ package br.com.bittreasure.contract.v1.exchange.controller;
 import br.com.bittreasure.contract.v1.exchange.controller.facade.ExchangeControllerFacade;
 import br.com.bittreasure.contract.v1.exchange.models.response.ExchangeCompleteResponse;
 import br.com.bittreasure.contract.v1.exchange.models.response.ExchangeResponse;
+import br.com.bittreasure.contract.v1.exchange.models.response.ListExchangeResponse;
 import br.com.bittreasure.impl.exceptions.errors.ResponseError;
 import br.com.bittreasure.impl.exchange.models.Exchange;
 import io.swagger.annotations.Api;
@@ -35,7 +36,7 @@ public class ExchangeController {
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @PostMapping("/saveAll")
-    public ExchangeCompleteResponse saveAll() {
+    public ListExchangeResponse saveAll() {
         return facade.saveAll();
     }
 

@@ -1,17 +1,16 @@
 package br.com.bittreasure.impl.exchange.services;
 
+import br.com.bittreasure.impl.coin.services.CoinService;
 import br.com.bittreasure.impl.exceptions.ApiException;
 import br.com.bittreasure.impl.exceptions.errors.StandartError;
 import br.com.bittreasure.impl.exceptions.issues.Issue;
 import br.com.bittreasure.impl.exchange.models.Exchange;
+import br.com.bittreasure.impl.exchange.models.Market;
 import br.com.bittreasure.impl.exchange.repositories.ExchangeRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +21,29 @@ import java.util.NoSuchElementException;
 public class ExchangeService {
 
     private final ExchangeRepository repository;
+    private final CoinService service;
 
-    public ExchangeService(ExchangeRepository repository) {
+    public ExchangeService(ExchangeRepository repository, CoinService service) {
         this.repository = repository;
+        this.service = service;
+    }
+
+    public List<Exchange> updateCoinExchanges() {
+//        TODO reaviliar esse metodo
+        log.info("Initialized uptade of coins to put exchanges");
+        List<Exchange> exchanges = ExchangeOperations.getExchanges();
+        exchanges.forEach(e -> e.setAllMarkets(ExchangeOperations.getExchangeMarkets(e.getId())));
+        exchanges.forEach(e -> {
+                    List<Market> exchangeMarkets = e.getAllMarkets();
+                    exchangeMarkets.forEach(m -> {
+                        service.updateCoinExchanges(m.getBaseCurrencyId(), m.getQuoteCurrencyId(), e.getId());
+                        log.info("Added {} to {} and {}", e.getId(), m.getBaseCurrencyId(), m.getQuoteCurrencyId());
+                        repository.save(e);
+                        log.info("Save exchange {} with id {}", e.getName(), e.getId());
+                    });
+                }
+        );
+        return exchanges;
     }
 
     public Exchange find(String id) {
@@ -47,12 +66,12 @@ public class ExchangeService {
     }
 
     public Exchange save() {
-        List<Exchange> exchanges = getExchanges();
+        List<Exchange> exchanges = ExchangeOperations.getExchanges();
         return repository.save(exchanges.get(0));
     }
 
     public List<Exchange> saveAll() {
-        List<Exchange> exchanges = getExchanges();
+        List<Exchange> exchanges = ExchangeOperations.getExchanges();
         List<Exchange> returned = new ArrayList<>();
 //        TODO trocar para adicionar todos ao inves de adicionar 5
         for (int i = 0; i < 5; i++) {
@@ -62,13 +81,5 @@ public class ExchangeService {
         return returned;
     }
 
-    private List<Exchange> getExchanges() {
-        RestTemplate template = new RestTemplate();
-        ResponseEntity<List<Exchange>> responseEntity = template
-                .exchange("https://api.coinpaprika.com/v1/exchanges", HttpMethod.GET,
-                null, new ParameterizedTypeReference<List<Exchange>>() {
-                });
-        return responseEntity.getBody();
-    }
 
 }

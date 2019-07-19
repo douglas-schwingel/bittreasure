@@ -22,8 +22,8 @@ public class CoinMapper {
                 .name(coin.getName())
                 .symbol(coin.getSymbol())
                 .rank(coin.getRank())
-                .is_new(coin.getIs_new())
-                .is_active(coin.getIs_active())
+                .is_new(coin.getIsNew())
+                .is_active(coin.getIsActive())
                 .type(coin.getType())
                 .build();
     }
@@ -32,7 +32,8 @@ public class CoinMapper {
         return SimplifiedCoinResponse.builder()
                 .id(coin.getId())
                 .name(coin.getName())
-                .is_active(coin.getIs_active())
+                .isActive(coin.getIsActive())
+                .lastDataAt(coin.getLastDataAt())
                 .build();
     }
 

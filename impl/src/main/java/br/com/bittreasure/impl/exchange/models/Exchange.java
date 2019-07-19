@@ -1,9 +1,12 @@
 package br.com.bittreasure.impl.exchange.models;
 
 import com.couchbase.client.java.repository.annotation.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.couchbase.core.mapping.Document;
+
+import java.util.List;
 
 @Document
 @Data
@@ -17,8 +20,12 @@ public class Exchange {
     @ToString.Include
     private String description;
     private String active;
-    private String website_status;
-    private String api_status;
+    @JsonProperty("website_status")
+    private String websiteStatus;
+    @JsonProperty("api_status")
+    private String apiStatus;
     private String message;
+    private Integer markets;
+    private List<Market> allMarkets;
 
 }

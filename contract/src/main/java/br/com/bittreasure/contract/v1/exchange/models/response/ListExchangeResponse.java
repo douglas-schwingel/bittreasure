@@ -6,9 +6,10 @@ import lombok.Singular;
 
 import java.util.List;
 
-@Builder
 @Data
-public class ExchangeCompleteResponse {
+@Builder
+public class ListExchangeResponse {
 
-
+    @Singular
+    private List<ExchangeResponse> exchanges;
 }

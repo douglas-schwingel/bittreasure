@@ -25,7 +25,7 @@ public class CoinResponse {
     private int rank;
     @ApiModelProperty(value = "is_new", example = "false")
     private String is_new;
-    @ApiModelProperty(value = "is_active", example = "true")
+    @ApiModelProperty(value = "isActive", example = "true")
     private String is_active;
     @ApiModelProperty(value = "type", example = "coin")
     private String type;

@@ -20,4 +20,5 @@ public enum ValidCoinFilters {
     public FilterType getFilterType() {
         return filterType;
     }
+
 }

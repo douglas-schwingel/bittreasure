@@ -24,6 +24,8 @@ public class ExchangeFacadeImpl {
     }
 
     public List<Exchange> saveAll() {
-        return service.saveAll();
+        return service.updateCoinExchanges();
     }
+
+
 }

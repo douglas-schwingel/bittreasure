@@ -2,6 +2,7 @@ package br.com.bittreasure.contract.v1.exchange.mapper;
 
 import br.com.bittreasure.contract.v1.exchange.models.response.ExchangeCompleteResponse;
 import br.com.bittreasure.contract.v1.exchange.models.response.ExchangeResponse;
+import br.com.bittreasure.contract.v1.exchange.models.response.ListExchangeResponse;
 import br.com.bittreasure.impl.exchange.models.Exchange;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,18 @@ public class ExchangeMapper {
                 .name(exchange.getName())
                 .active(exchange.getActive())
                 .description(exchange.getDescription())
+                .markets(exchange.getAllMarkets())
                 .build();
     }
 
     public ExchangeCompleteResponse mapToExchangeCompleteResponse(List<Exchange> exchanges) {
-        ExchangeCompleteResponse.ExchangeCompleteResponseBuilder builder = ExchangeCompleteResponse.builder();
+        var builder = ExchangeCompleteResponse.builder();
+//        TODO criar uma ExchangeCompleteResponse
+        return builder.build();
+    }
+
+    public ListExchangeResponse mapToListExchangeResponse(List<Exchange> exchanges) {
+        var builder = ListExchangeResponse.builder();
         exchanges.forEach(e -> builder.exchange(mapToExchangeResponse(e)));
         return builder.build();
     }
