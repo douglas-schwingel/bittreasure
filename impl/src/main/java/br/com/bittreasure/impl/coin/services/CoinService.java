@@ -61,13 +61,6 @@ public class CoinService {
         return returned;
     }
 
-    public Coin teste() {
-        Coin coin = new Coin();
-        coin.setId("aphelion");
-        coin.setName("Aphelion");
-        return repository.save(coin);
-    }
-
     private List<Coin> getCoins() {
         RestTemplate template = new RestTemplate();
         ResponseEntity<List<Coin>> responseEntity = template.exchange("https://api.coinpaprika.com/v1/coins", HttpMethod.GET,

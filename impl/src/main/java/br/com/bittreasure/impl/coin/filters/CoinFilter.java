@@ -1,7 +1,6 @@
 package br.com.bittreasure.impl.coin.filters;
 
 import br.com.bittreasure.impl.coin.filters.models.FilterType;
-import br.com.bittreasure.impl.coin.filters.models.NoFilter;
 import br.com.bittreasure.impl.exceptions.ApiException;
 import br.com.bittreasure.impl.exceptions.errors.StandartError;
 import br.com.bittreasure.impl.exceptions.issues.Issue;
@@ -14,11 +13,11 @@ import org.springframework.stereotype.Service;
 public class CoinFilter {
 
     public FilterType filtra(String filter) {
-        ValidCoinFilters validCoinFilters = verificaSeEhValido(filter);
+        ValidCoinFilters validCoinFilters = isValid(filter);
         return validCoinFilters.getFilterType();
     }
 
-    private ValidCoinFilters verificaSeEhValido(String filter) {
+    private ValidCoinFilters isValid(String filter) {
         try {
             return ValidCoinFilters.valueOf(filter.toUpperCase());
 
@@ -33,7 +32,7 @@ public class CoinFilter {
                             .build()
             );
         } catch (NullPointerException e) {
-            log.info("Filter e/ou value vazio");
+            log.info("Filter and/or value is null");
             return ValidCoinFilters.NO_FILTER;
         }
     }

@@ -22,10 +22,6 @@ public class CoinFacadeImpl {
         this.coinFilter = filter;
     }
 
-    public Coin save() {
-        return service.save();
-    }
-
     public Coin find(String id) {
         return service.find(id);
     }
@@ -33,10 +29,6 @@ public class CoinFacadeImpl {
     public List<Coin> findAll(@Nullable String filter, @Nullable String value) {
         FilterType filterType = coinFilter.filtra(filter);
         return service.findWithFilters(filterType, value);
-    }
-
-    public Coin salvaFalso(){
-        return service.teste();
     }
 
     public List<Coin> saveAll() {
