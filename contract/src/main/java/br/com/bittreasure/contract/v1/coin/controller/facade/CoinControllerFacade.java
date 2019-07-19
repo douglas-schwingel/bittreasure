@@ -24,12 +24,17 @@ public class CoinControllerFacade {
     }
 
 
-    public CoinResponse find(String id, @Nullable String filter, @Nullable  String value) {
-        return mapper.mapToCoinResponse(facadeImpl.find(id, filter, value));
+    public CoinResponse find(String id) {
+        return mapper.mapToCoinResponse(facadeImpl.find(id));
     }
 
     public ListSimplifiedCoinResponse saveAll() {
         List<Coin> list = facadeImpl.saveAll();
+        return mapper.mapToListSimplifiedCoinResponse(list);
+    }
+
+    public ListSimplifiedCoinResponse findAll(@Nullable String filter, @Nullable  String value) {
+        List<Coin> list = facadeImpl.findAll(filter, value);
         return mapper.mapToListSimplifiedCoinResponse(list);
     }
 }

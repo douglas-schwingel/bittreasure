@@ -19,6 +19,10 @@ public class ExchangeFacadeImpl {
         return service.find(id);
     }
 
+    public List<Exchange> findAll() {
+        return service.findAll();
+    }
+
     public List<Exchange> saveAll() {
         return service.saveAll();
     }

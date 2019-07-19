@@ -1,5 +1,6 @@
 package br.com.bittreasure.impl.coin.services;
 
+import br.com.bittreasure.impl.coin.filters.models.FilterType;
 import br.com.bittreasure.impl.coin.models.Coin;
 import br.com.bittreasure.impl.coin.repositories.CoinRepository;
 import br.com.bittreasure.impl.exceptions.ApiException;
@@ -10,6 +11,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -44,6 +46,10 @@ public class CoinService {
                 .build()));
     }
 
+    public List<Coin> findWithFilters(FilterType filterType, String value) {
+        return filterType.doSearch(repository, value);
+    }
+
     public List<Coin> saveAll() {
 //        TODO fazer salvar todos ao inves de salvar 5
         List<Coin> coins = getCoins();
@@ -60,15 +66,6 @@ public class CoinService {
         coin.setId("aphelion");
         coin.setName("Aphelion");
         return repository.save(coin);
-    }
-
-    public List<Coin> findAll() {
-        log.info("Entrou no findAll do service");
-        List<Coin> list = new ArrayList<>();
-        log.info(repository.findAll().toString());
-        repository.findAll().forEach(list::add);
-        list.forEach(c -> log.info(c.getName()));
-        return list;
     }
 
     private List<Coin> getCoins() {

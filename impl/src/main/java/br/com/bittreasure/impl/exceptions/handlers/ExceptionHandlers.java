@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
 @Slf4j
 @ControllerAdvice
@@ -21,6 +22,8 @@ public class ExceptionHandlers {
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ResponseError> apiException(ApiException exception, HttpServletRequest request) {
+        log.error("ApiException: {}", exception.getMessage());
+        exception.printStackTrace();
         return ResponseEntity.status(exception.getErrors().get(0).getStatus())
                 .body(new ResponseError(request.getRequestURI(), PT_BR, exception.getErrors()));
     }
@@ -36,6 +39,8 @@ public class ExceptionHandlers {
                 .suggestedUserAction("Contact the developer")
                 .suggestedApplicationAction("This method is not supported here. Contact us")
                 .build();
+        log.error("HttpRequestMethodNotSupportedException: {}", exception.getMessage());
+        exception.printStackTrace();
         return new ResponseEntity<>(ResponseError.builder()
                 .namespace(request.getRequestURI())
                 .language(PT_BR)
@@ -54,6 +59,8 @@ public class ExceptionHandlers {
                 .suggestedApplicationAction("Don't do anything.. It's not your fault")
                 .build()
         );
+        log.error("Exception: {}", exception.getMessage());
+        exception.printStackTrace();
         return ResponseEntity.status(apiException.getErrors().get(0).getStatus())
                 .body(new ResponseError(request.getRequestURI(), PT_BR, apiException.getErrors()));
     }

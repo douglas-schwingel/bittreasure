@@ -28,4 +28,8 @@ public class ExchangeControllerFacade {
         List<Exchange> exchanges = facade.saveAll();
         return mapper.mapToExchangeCompleteResponse(exchanges);
     }
+
+    public List<Exchange> findAll() {
+        return facade.findAll();
+    }
 }

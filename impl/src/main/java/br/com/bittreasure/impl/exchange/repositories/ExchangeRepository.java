@@ -7,7 +7,7 @@ import org.springframework.data.couchbase.repository.CouchbaseRepository;
 import org.springframework.stereotype.Repository;
 
 @N1qlSecondaryIndexed(indexName = "exchangeRepository")
-@ViewIndexed(designDoc = "br/com/bittreasure/contract/v1/exchange")
+@ViewIndexed(designDoc = "exchange")
 @Repository
 public interface ExchangeRepository extends CouchbaseRepository<Exchange, String> {
 }

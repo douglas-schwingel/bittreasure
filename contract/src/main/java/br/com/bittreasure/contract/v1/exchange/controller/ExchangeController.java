@@ -4,12 +4,15 @@ import br.com.bittreasure.contract.v1.exchange.controller.facade.ExchangeControl
 import br.com.bittreasure.contract.v1.exchange.models.response.ExchangeCompleteResponse;
 import br.com.bittreasure.contract.v1.exchange.models.response.ExchangeResponse;
 import br.com.bittreasure.impl.exceptions.errors.ResponseError;
+import br.com.bittreasure.impl.exchange.models.Exchange;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Api(tags = {"v1", "Exchange"})
@@ -49,4 +52,10 @@ public class ExchangeController {
     public ExchangeResponse find(@PathVariable("id") String id) {
        return facade.find(id);
     }
+
+    @GetMapping("/findAll")
+    public List<Exchange> findAll() {
+        return facade.findAll();
+    }
+
 }

@@ -5,6 +5,7 @@ import br.com.bittreasure.impl.exceptions.errors.StandartError;
 import br.com.bittreasure.impl.exceptions.issues.Issue;
 import br.com.bittreasure.impl.exchange.models.Exchange;
 import br.com.bittreasure.impl.exchange.repositories.ExchangeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Slf4j
 @Service
 public class ExchangeService {
 
@@ -35,6 +37,13 @@ public class ExchangeService {
                 .suggestedUserAction("Verify the id and try again")
                 .build()
         ));
+    }
+
+    public List<Exchange> findAll() {
+        List<Exchange> list = new ArrayList<>();
+        repository.findAll().forEach(list::add);
+        list.forEach(e -> log.info(e.toString()));
+        return list;
     }
 
     public Exchange save() {

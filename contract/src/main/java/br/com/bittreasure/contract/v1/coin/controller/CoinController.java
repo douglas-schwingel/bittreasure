@@ -69,7 +69,25 @@ public class CoinController {
 
                              @ApiParam(value = "Filter value", example = "BitCoin")
                              @RequestParam("value") @Nullable String value) {
-        return coinControllerFacade.find(id, filter, value);
+        return coinControllerFacade.find(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get all coins", notes = "Get all coins. Can be filtered")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Coins retrivied", response = ListSimplifiedCoinResponse.class),
+            @ApiResponse(code = 400, message = "Bad request", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Method not allowed", response = ResponseError.class),
+            @ApiResponse(code = 404, message = "Coin not found", response = ResponseError.class),
+            @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
+    })
+    @GetMapping("/")
+    public ListSimplifiedCoinResponse findAll(@ApiParam(value = "CoinFilter by name", example = "BitCoin")
+                             @RequestParam("filter") @Nullable String filter,
+
+                             @ApiParam(value = "Filter value", example = "BitCoin")
+                             @RequestParam("value") @Nullable String value) {
+        return coinControllerFacade.findAll(filter, value);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

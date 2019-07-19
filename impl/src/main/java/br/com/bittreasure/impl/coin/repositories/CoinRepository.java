@@ -6,10 +6,13 @@ import org.springframework.data.couchbase.core.query.ViewIndexed;
 import org.springframework.data.couchbase.repository.CouchbaseRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @N1qlSecondaryIndexed(indexName = "coinRepository")
 @ViewIndexed(designDoc = "coin")
 @Repository
 public interface CoinRepository extends CouchbaseRepository<Coin, String> {
 
-    Coin findAllByIdAndRankIsLessThanEqual(String id, Integer rank);
+    List<Coin> findAllByRankLessThan(Integer rank);
+    List<Coin> findAllByRankGreaterThan(Integer rank);
 }

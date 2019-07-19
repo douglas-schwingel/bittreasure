@@ -1,8 +1,10 @@
 package br.com.bittreasure.impl.coin.filters;
 
+import br.com.bittreasure.impl.coin.filters.models.FilterType;
+import br.com.bittreasure.impl.coin.filters.models.NoFilter;
 import br.com.bittreasure.impl.exceptions.ApiException;
-import br.com.bittreasure.impl.exceptions.issues.Issue;
 import br.com.bittreasure.impl.exceptions.errors.StandartError;
+import br.com.bittreasure.impl.exceptions.issues.Issue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -11,14 +13,14 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class CoinFilter {
 
-    public void filtra(String filter, String value) {
-        verificaSeEhValido(filter);
-
+    public FilterType filtra(String filter) {
+        ValidCoinFilters validCoinFilters = verificaSeEhValido(filter);
+        return validCoinFilters.getFilterType();
     }
 
-    private void verificaSeEhValido(String filter) {
+    private ValidCoinFilters verificaSeEhValido(String filter) {
         try {
-            ValidCoinFilters.valueOf(filter.toUpperCase());
+            return ValidCoinFilters.valueOf(filter.toUpperCase());
 
         } catch (IllegalArgumentException e) {
             throw new ApiException(StandartError.builder()
@@ -32,6 +34,7 @@ public class CoinFilter {
             );
         } catch (NullPointerException e) {
             log.info("Filter e/ou value vazio");
+            return ValidCoinFilters.NO_FILTER;
         }
     }
 }

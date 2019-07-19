@@ -56,6 +56,6 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
     @Override
     public IndexManager indexManager() {
-        return new IndexManager(false, true, false);
+        return new IndexManager(true, true, true);
     }
 }
