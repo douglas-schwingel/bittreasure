@@ -1,9 +1,24 @@
-package br.com.bittreasure.impl.coin.services;
+/*
+ * Copyright (c) 2016 Couchbase, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package test;
 
 import com.couchbase.client.deps.com.fasterxml.jackson.databind.JsonNode;
 import com.couchbase.client.deps.com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.rnorth.ducttape.TimeoutException;
+import org.rnorth.ducttape.unreliables.Unreliables;
 import org.testcontainers.containers.ContainerLaunchException;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.shaded.com.google.common.base.Strings;
@@ -14,8 +29,6 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
-
-import static org.rnorth.ducttape.unreliables.Unreliables.retryUntilSuccess;
 
 /**
  * Created by ldoguin on 18/07/16.
@@ -74,7 +87,7 @@ public class CouchbaseWaitStrategy extends GenericContainer.AbstractWaitStrategy
 
         // try to connect to the URL
         try {
-            retryUntilSuccess((int) startupTimeout.getSeconds(), TimeUnit.SECONDS, () -> {
+            Unreliables.retryUntilSuccess((int) startupTimeout.getSeconds(), TimeUnit.SECONDS, () -> {
                 getRateLimiter().doWhenReady(() -> {
                     try {
                         final HttpURLConnection connection = (HttpURLConnection) new URL(uri).openConnection();

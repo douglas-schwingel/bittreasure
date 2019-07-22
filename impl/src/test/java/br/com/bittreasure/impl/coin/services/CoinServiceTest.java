@@ -1,28 +1,44 @@
 package br.com.bittreasure.impl.coin.services;
 
+import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.CouchbaseCluster;
+import com.couchbase.client.java.bucket.BucketType;
+import com.couchbase.client.java.cluster.BucketSettings;
+import com.couchbase.client.java.cluster.ClusterManager;
+import com.couchbase.client.java.cluster.DefaultBucketSettings;
 import com.couchbase.client.java.env.CouchbaseEnvironment;
-import com.couchbase.client.java.env.DefaultCouchbaseEnvironment;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.testcontainers.containers.GenericContainer;
+import test.CouchbaseContainer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class CoinServiceTest {
 
-    @ClassRule
-    public GenericContainer couchbase = new GenericContainer("dschwingel/mycouchbase:latest")
-            .withExposedPorts(8091,8092,8093,8094,11207,11210,11211,18091,18092,18093)
-            .waitingFor(new CouchbaseWaitStrategy());
+    public static CouchbaseContainer couchbase = new CouchbaseContainer("couchbase")
+            .withIndex(true)
+            .withClusterUsername("admin")
+            .withClusterPassword("localhost")
+            .withNewBucket(DefaultBucketSettings.builder().enableFlush(true)
+                    .name("bittreasure").type(BucketType.COUCHBASE).build())
+            .withNewBucket(DefaultBucketSettings.builder().enableFlush(true)
+                    .name("exchanges").type(BucketType.COUCHBASE).build());
+
+    static {
+        couchbase.start();
+    }
 
     @Test
     public void shouldConnectToCouchbase() {
-        CouchbaseEnvironment env = DefaultCouchbaseEnvironment.builder()
-                .bootstrapCarrierDirectPort(couchbase.getMappedPort(11210))
-                .bootstrapCarrierSslPort(couchbase.getMappedPort(11207))
-                .bootstrapHttpDirectPort(couchbase.getMappedPort(8091))
-                .bootstrapHttpSslPort(couchbase.getMappedPort(18091))
-                .build();
+        CouchbaseEnvironment couchbaseEnvironnement = couchbase.getCouchbaseEnvironnement();
+
+        CouchbaseCluster couchbaseCluster = CouchbaseCluster.create(couchbaseEnvironnement);
+        couchbaseCluster.authenticate("admin", "localhost");
+        Bucket bittreasure = couchbaseCluster.openBucket("bittreasure");
+        Bucket exchanges = couchbaseCluster.openBucket("exchanges");
+        ClusterManager cm = couchbaseCluster.clusterManager();
+        assertTrue(cm.hasBucket("bittreasure"));
+        assertTrue(cm.hasBucket("exchanges"));
 
     }
 
