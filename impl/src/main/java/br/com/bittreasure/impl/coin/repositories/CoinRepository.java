@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface CoinRepository extends CouchbaseRepository<Coin, String> {
 
-    List<Coin> findAllByRankLessThan(Integer rank);
-    List<Coin> findAllByRankGreaterThan(Integer rank);
+    List<Coin> findAllByRankLessThanOrderByRank(Integer rank);
+    List<Coin> findAllByRankGreaterThanOrderByRank(Integer rank);
 }

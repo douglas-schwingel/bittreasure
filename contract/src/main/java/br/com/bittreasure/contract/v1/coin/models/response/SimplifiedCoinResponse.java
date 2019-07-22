@@ -23,4 +23,6 @@ public class SimplifiedCoinResponse {
     @ApiModelProperty(example = "2013-04-28T00:00:00")
     @JsonProperty("last_data_at")
     private LocalDateTime lastDataAt;
+    @ApiModelProperty(example = "1")
+    private int rank;
 }

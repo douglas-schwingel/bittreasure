@@ -1,43 +1,71 @@
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 buildscript {
-	repositories {
-		jcenter()
-		mavenCentral()
-	}
-	dependencies {
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE"
-		classpath "io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE"
-	}
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE"
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE"
+    }
 }
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
+
+
+group = 'br.com.bittreasure'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    implementation project(':contract')
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
 
 subprojects {
     apply plugin: 'java'
-	apply plugin: 'idea'
+    apply plugin: 'idea'
     apply plugin: 'io.spring.dependency-management'
-    
+
     group = 'br.com.bittreasure'
     version = '0.0.1-SNAPSHOT'
     sourceCompatibility = JavaVersion.VERSION_11
 
     repositories {
-		mavenCentral()
-	}
+        mavenCentral()
+    }
 
-	dependencyManagement {
-		imports {
-			mavenBom SpringBootPlugin.BOM_COORDINATES
-		}
-	}
+    dependencyManagement {
+        imports {
+            mavenBom SpringBootPlugin.BOM_COORDINATES
+        }
+    }
 
-	dependencies {
-		implementation 'org.springframework.boot:spring-boot-starter-actuator'
-		implementation 'org.springframework.boot:spring-boot-starter-web'
-		implementation 'org.springframework.boot:spring-boot-starter-data-couchbase'
-		implementation 'io.springfox:springfox-swagger-ui:2.9.2'
-		implementation 'io.springfox:springfox-swagger2:2.9.2'
-		compileOnly 'org.projectlombok:lombok:1.18.8'
-		annotationProcessor 'org.projectlombok:lombok:1.18.8'
-		testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	}
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-data-couchbase'
+        implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+        implementation 'io.springfox:springfox-swagger2:2.9.2'
+        compileOnly 'org.projectlombok:lombok:1.18.8'
+        annotationProcessor 'org.projectlombok:lombok:1.18.8'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation "org.testcontainers:testcontainers:1.11.3"
+    }
+
 }
+

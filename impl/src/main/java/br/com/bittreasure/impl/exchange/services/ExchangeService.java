@@ -20,31 +20,27 @@ import java.util.NoSuchElementException;
 public class ExchangeService {
 
     private final ExchangeRepository repository;
-    private final CoinService service;
 
-    public ExchangeService(ExchangeRepository repository, CoinService service) {
+    public ExchangeService(ExchangeRepository repository) {
         this.repository = repository;
-        this.service = service;
     }
 
-    public List<Exchange> updateCoinExchanges() {
-//        TODO reaviliar esse metodo
-        log.info("Initialized uptade of coins to put exchanges");
-        List<Exchange> exchanges = ExchangeOperations.getExchanges();
-        exchanges.forEach(e -> {
-            log.info("Setting markets for {}", e.getName());
-            e.setAllMarkets(ExchangeOperations.getExchangeMarkets(e.getId()));
-            List<Market> exchangeMarkets = e.getAllMarkets();
-            exchangeMarkets.forEach(m -> {
-                log.info("Setting {} to coins {} and {}", m.getPair(), m.getBaseCurrencyId(), m.getQuoteCurrencyId());
-                service.updateCoinExchange(m.getBaseCurrencyId(), e.getId());
-                service.updateCoinExchange(m.getQuoteCurrencyId(), e.getId());
-            });
-            repository.save(e);
-            log.info("Saved exchange {} with id {}", e.getName(), e.getId());
-        });
+    public List<Exchange> getExchangesInformation() {
+        return ExchangeOperations.getExchanges();
+    }
 
-        return exchanges;
+    public void updateMarkets(List<Exchange> exchanges, CoinService coinService) {
+        exchanges.forEach(e -> {
+            List<Market> markets = ExchangeOperations.getExchangeMarkets(e.getId());
+            e.setAllMarkets(markets);
+            markets.forEach(m -> {
+                log.info("Setting {} to {} and {}", e.getId(), m.getBaseCurrencyId(), m.getQuoteCurrencyId());
+                coinService.updateCoinExchange(m.getBaseCurrencyId(), e.getId());
+                coinService.updateCoinExchange(m.getQuoteCurrencyId(), e.getId());
+            });
+            save(e);
+            log.info("Saved exchange {}", e.getName());
+        });
     }
 
     public Exchange find(String id) {
@@ -66,21 +62,11 @@ public class ExchangeService {
         return list;
     }
 
-    public Exchange save() {
-        List<Exchange> exchanges = ExchangeOperations.getExchanges();
-        return repository.save(exchanges.get(0));
+    public Exchange save(Exchange exchange) {
+        return repository.save(exchange);
     }
 
-    public List<Exchange> saveAll() {
-        List<Exchange> exchanges = ExchangeOperations.getExchanges();
-        List<Exchange> returned = new ArrayList<>();
-//        TODO trocar para adicionar todos ao inves de adicionar 5
-        for (int i = 0; i < 5; i++) {
-            returned.add(repository.save(exchanges.get(i)));
-        }
-//        repository.saveAll(exchanges);
-        return returned;
-    }
+
 
 
 }

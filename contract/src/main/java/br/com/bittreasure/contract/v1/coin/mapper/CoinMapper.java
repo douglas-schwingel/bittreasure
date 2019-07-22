@@ -33,6 +33,7 @@ public class CoinMapper {
                 .id(coin.getId())
                 .name(coin.getName())
                 .isActive(coin.getIsActive())
+                .rank(coin.getRank())
                 .lastDataAt(coin.getLastDataAt())
                 .build();
     }

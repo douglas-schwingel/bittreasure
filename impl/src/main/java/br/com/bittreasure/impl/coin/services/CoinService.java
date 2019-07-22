@@ -7,17 +7,12 @@ import br.com.bittreasure.impl.exceptions.ApiException;
 import br.com.bittreasure.impl.exceptions.errors.StandartError;
 import br.com.bittreasure.impl.exceptions.issues.Issue;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 @Slf4j
 @Service
@@ -29,40 +24,25 @@ public class CoinService {
         this.repository = repository;
     }
 
-    @Scheduled(fixedDelay = 3000)
+    @Scheduled(fixedRate =  3000)
     public void save() {
         log.info("Initializing save method");
         List<Coin> coins = CoinOperations.getCoins();
-        List<Coin> errors = new ArrayList<>();
+        Semaphore semaphore = new Semaphore(3);
         coins.forEach(c -> {
-            Coin coin = null;
             try {
-                coin = CoinOperations.getAllCoinInformations(c);
-            } catch (IndexOutOfBoundsException e) {
-                log.error("Error trying to save {}: TimedOut", c.getId());
-                errors.add(c);
-                log.warn("Error adding {} coins", errors.size());
-                return;
+                semaphore.acquire();
+                new Thread(() -> {
+                    Coin coin = CoinOperations.getCoinInformation(c.getId());
+                    CoinOperations.setPriceInformations(coin);
+                    log.info("Saving coin {}", coin.getName());
+                    repository.save(coin);
+                    semaphore.release();
+                }, "Save coin").start();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            log.info("Saving coin {}", coin.getName());
-            repository.save(coin);
         });
-        while(!errors.isEmpty()) {
-            errors.forEach(c -> {
-                Coin coin = null;
-                try {
-                    coin = CoinOperations.getAllCoinInformations(c);
-                } catch (IndexOutOfBoundsException e) {
-                    log.error("Error trying to save {}: TimedOut", c.getId());
-                    return;
-                }
-                log.info("Saving coin {}", coin.getName());
-                repository.save(coin);
-                errors.remove(c);
-            });
-
-        }
-
     }
 
     public void updateCoinExchange(String coinId, String exchangeId) {

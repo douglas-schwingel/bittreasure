@@ -1,6 +1,4 @@
 rootProject.name = 'bittreasure'
-include 'app'
 include 'impl'
 include 'contract'
-include 'impl-br.com.bittreasure.v1.exchange'
 
