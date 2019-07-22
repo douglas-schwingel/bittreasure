@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -36,26 +33,57 @@ public class CoinService {
     public void save() {
         log.info("Initializing save method");
         List<Coin> coins = CoinOperations.getCoins();
+        List<Coin> errors = new ArrayList<>();
         coins.forEach(c -> {
             Coin coin = null;
             try {
                 coin = CoinOperations.getAllCoinInformations(c);
             } catch (IndexOutOfBoundsException e) {
                 log.error("Error trying to save {}: TimedOut", c.getId());
+                errors.add(c);
+                log.warn("Error adding {} coins", errors.size());
                 return;
             }
             log.info("Saving coin {}", coin.getName());
             repository.save(coin);
         });
+        while(!errors.isEmpty()) {
+            errors.forEach(c -> {
+                Coin coin = null;
+                try {
+                    coin = CoinOperations.getAllCoinInformations(c);
+                } catch (IndexOutOfBoundsException e) {
+                    log.error("Error trying to save {}: TimedOut", c.getId());
+                    return;
+                }
+                log.info("Saving coin {}", coin.getName());
+                repository.save(coin);
+                errors.remove(c);
+            });
+
+        }
+
     }
 
-    public void updateCoinExchanges(String baseCoinId, String quoteCoinId, String exchangeId) {
-        Coin baseCoin = repository.findById(baseCoinId).get();
-        Coin quoteCoin = repository.findById(quoteCoinId).get();
-        baseCoin.getExchanges().add(exchangeId);
-        quoteCoin.getExchanges().add(exchangeId);
+    public void updateCoinExchange(String coinId, String exchangeId) {
+        Coin baseCoin;
+        try {
+            baseCoin = repository.findById(coinId).orElseThrow(IllegalArgumentException::new);
+        } catch (IllegalArgumentException | NullPointerException e) {
+            log.error("Coin {} not registered yet", coinId);
+            return;
+        }
+        try {
+            Set<String> exchanges = baseCoin.getExchanges();
+            exchanges.add(exchangeId);
+        } catch (NullPointerException e) {
+            log.warn("{} doesn't have exchange Set. Creating and adding exchange {}", coinId, exchangeId);
+            baseCoin.setExchanges(new HashSet<>());
+            baseCoin.getExchanges().add(exchangeId);
+            log.info("Added exchange");
+        }
         repository.save(baseCoin);
-        repository.save(quoteCoin);
+        log.info("Added {} to {}'s exchanges set", exchangeId, baseCoin.getName());
     }
 
 

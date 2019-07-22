@@ -9,7 +9,6 @@ import br.com.bittreasure.impl.exchange.models.Market;
 import br.com.bittreasure.impl.exchange.repositories.ExchangeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,17 +31,19 @@ public class ExchangeService {
 //        TODO reaviliar esse metodo
         log.info("Initialized uptade of coins to put exchanges");
         List<Exchange> exchanges = ExchangeOperations.getExchanges();
-        exchanges.forEach(e -> e.setAllMarkets(ExchangeOperations.getExchangeMarkets(e.getId())));
         exchanges.forEach(e -> {
-                    List<Market> exchangeMarkets = e.getAllMarkets();
-                    exchangeMarkets.forEach(m -> {
-                        service.updateCoinExchanges(m.getBaseCurrencyId(), m.getQuoteCurrencyId(), e.getId());
-                        log.info("Added {} to {} and {}", e.getId(), m.getBaseCurrencyId(), m.getQuoteCurrencyId());
-                        repository.save(e);
-                        log.info("Save exchange {} with id {}", e.getName(), e.getId());
-                    });
-                }
-        );
+            log.info("Setting markets for {}", e.getName());
+            e.setAllMarkets(ExchangeOperations.getExchangeMarkets(e.getId()));
+            List<Market> exchangeMarkets = e.getAllMarkets();
+            exchangeMarkets.forEach(m -> {
+                log.info("Setting {} to coins {} and {}", m.getPair(), m.getBaseCurrencyId(), m.getQuoteCurrencyId());
+                service.updateCoinExchange(m.getBaseCurrencyId(), e.getId());
+                service.updateCoinExchange(m.getQuoteCurrencyId(), e.getId());
+            });
+            repository.save(e);
+            log.info("Saved exchange {} with id {}", e.getName(), e.getId());
+        });
+
         return exchanges;
     }
 
