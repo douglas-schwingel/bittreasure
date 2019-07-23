@@ -90,18 +90,5 @@ public class CoinController {
         return coinControllerFacade.findAll(filter, value);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "Get coin", notes = "Get coin information based on its id")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Coins Saved", response = ListSimplifiedCoinResponse.class),
-            @ApiResponse(code = 400, message = "Bad request", response = ResponseError.class),
-            @ApiResponse(code = 403, message = "Method not allowed", response = ResponseError.class),
-            @ApiResponse(code = 404, message = "Coin not found", response = ResponseError.class),
-            @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
-    })
-    @PostMapping("/saveAll")
-    public ListSimplifiedCoinResponse saveAll() {
-        return coinControllerFacade.saveAll();
-    }
 
 }

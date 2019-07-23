@@ -1,5 +1,6 @@
 package br.com.bittreasure.contract.v1.coin.models.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -24,9 +25,11 @@ public class CoinResponse {
     @ApiModelProperty(value = "rank", example = "1")
     private int rank;
     @ApiModelProperty(value = "is_new", example = "false")
-    private String is_new;
+    @JsonProperty("is_new")
+    private String isNew;
     @ApiModelProperty(value = "isActive", example = "true")
-    private String is_active;
+    @JsonProperty("is_active")
+    private String isActive;
     @ApiModelProperty(value = "type", example = "coin")
     private String type;
 }

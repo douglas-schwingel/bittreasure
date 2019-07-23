@@ -11,9 +11,10 @@ import java.util.List;
 public class ApiException extends RuntimeException {
 
     @Getter
-    private List<StandartError> errors;
+    private final List<StandartError> errors;
 
     public ApiException(StandartError... errors) {
+        super(errors[0].getMessage());
         this.errors = Arrays.asList(errors);
     }
 

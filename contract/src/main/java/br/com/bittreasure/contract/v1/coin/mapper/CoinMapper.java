@@ -22,8 +22,8 @@ public class CoinMapper {
                 .name(coin.getName())
                 .symbol(coin.getSymbol())
                 .rank(coin.getRank())
-                .is_new(coin.getIsNew())
-                .is_active(coin.getIsActive())
+                .isNew(coin.getIsNew())
+                .isActive(coin.getIsActive())
                 .type(coin.getType())
                 .build();
     }

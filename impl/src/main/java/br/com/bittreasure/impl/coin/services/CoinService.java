@@ -19,28 +19,31 @@ import java.util.concurrent.Semaphore;
 public class CoinService {
 
     private final CoinRepository repository;
+    private CoinOperations operations;
 
-    public CoinService(CoinRepository repository) {
+    public CoinService(CoinRepository repository, CoinOperations operations) {
         this.repository = repository;
+        this.operations = operations;
     }
 
     @Scheduled(fixedRate =  3000)
     public void save() {
         log.info("Initializing save method");
-        List<Coin> coins = CoinOperations.getCoins();
+        List<Coin> coins = operations.getCoins();
         Semaphore semaphore = new Semaphore(3);
         coins.forEach(c -> {
             try {
                 semaphore.acquire();
                 new Thread(() -> {
-                    Coin coin = CoinOperations.getCoinInformation(c.getId());
-                    CoinOperations.setPriceInformations(coin);
+                    Coin coin = operations.getCoinInformation(c.getId());
+                    operations.setPriceInformations(coin);
                     log.info("Saving coin {}", coin.getName());
                     repository.save(coin);
                     semaphore.release();
                 }, "Save coin").start();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error("InterruptedException: {}", e.getMessage());
+                Thread.currentThread().interrupt();
             }
         });
     }
@@ -82,15 +85,5 @@ public class CoinService {
         return filterType.doSearch(repository, value);
     }
 
-    public List<Coin> saveAll() {
-//        TODO fazer salvar todos ao inves de salvar 5
-        List<Coin> coins = CoinOperations.getCoins();
-        List<Coin> returned = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            returned.add(repository.save(coins.get(new Random().nextInt(coins.size()))));
-        }
-
-        return returned;
-    }
 
 }

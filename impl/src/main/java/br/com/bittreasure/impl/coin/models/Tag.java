@@ -1,9 +1,11 @@
 package br.com.bittreasure.impl.coin.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class Tag {
 
     private String id;

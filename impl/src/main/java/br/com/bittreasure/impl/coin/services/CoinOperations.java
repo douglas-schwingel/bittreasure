@@ -5,16 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
 @Slf4j
-class CoinOperations {
+@Service
+public class CoinOperations {
 
-    static List<Coin> getCoins() {
+    public List<Coin> getCoins() {
         try {
             RestTemplate template = new RestTemplate();
             ResponseEntity<List<Coin>> responseEntity = template.exchange("https://api.coinpaprika.com/v1/coins", HttpMethod.GET,
@@ -28,7 +29,7 @@ class CoinOperations {
 
     }
 
-    static Coin getCoinInformation(String id) {
+    public Coin getCoinInformation(String id) {
         RestTemplate template = new RestTemplate();
         ResponseEntity<Coin> responseEntity;
         try {
@@ -42,7 +43,7 @@ class CoinOperations {
         return responseEntity.getBody();
     }
 
-    static void setPriceInformations(Coin coin) {
+    public void setPriceInformations(Coin coin) {
         try {
             RestTemplate template = new RestTemplate();
             ResponseEntity<Coin[]> responseEntity = template.exchange(
@@ -59,7 +60,7 @@ class CoinOperations {
         }
     }
 
-    private static void setCoinInformations(Coin coin, Coin body) {
+    private void setCoinInformations(Coin coin, Coin body) {
         coin.setTimeOpen(body.getTimeOpen());
         coin.setTimeClose(body.getTimeClose());
         coin.setOpen(body.getOpen());

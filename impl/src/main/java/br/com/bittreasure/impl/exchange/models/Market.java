@@ -1,11 +1,16 @@
 package br.com.bittreasure.impl.exchange.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Market {
 
     private String pair;
@@ -21,7 +26,8 @@ public class Market {
     private String category;
     @JsonProperty("fee_type")
     private String feeType;
-    private String outrlier;
+    private String outlier;
+    private Map<String, Quote> quotes;
     @JsonProperty("reported_volume_24h_share")
     private Double reportedVolume24hShare;
     @JsonProperty("last_updated")

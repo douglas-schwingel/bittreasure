@@ -7,12 +7,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Builder
 @Data
 @ApiModel
-public class StandartError {
+public class StandartError implements Serializable {
 
     @ApiModelProperty(example = "BAD_REQUEST")
     private String name;

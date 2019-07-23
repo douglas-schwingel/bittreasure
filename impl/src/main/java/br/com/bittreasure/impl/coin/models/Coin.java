@@ -2,7 +2,9 @@ package br.com.bittreasure.impl.coin.models;
 
 import com.couchbase.client.java.repository.annotation.Id;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Singular;
 import lombok.ToString;
 import org.springframework.data.couchbase.core.mapping.Document;
 
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @Document
+@Builder
 @Data
 @ToString(onlyExplicitlyIncluded = true)
 public class Coin {
@@ -30,6 +33,7 @@ public class Coin {
     private String isActive;
     private String type;
     private List<TeamMember> team;
+    @Singular
     private List<Tag> tags;
     private String description;
     private String message;
@@ -61,6 +65,7 @@ public class Coin {
     private Long volume;
     @JsonProperty("market_cap")
     private Long marketCap;
+    @Singular
     private Set<String> exchanges;
 
 }

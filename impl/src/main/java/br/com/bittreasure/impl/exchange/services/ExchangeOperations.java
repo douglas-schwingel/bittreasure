@@ -11,6 +11,10 @@ import java.util.List;
 
 public class ExchangeOperations {
 
+    private ExchangeOperations() {
+
+    }
+
     static List<Exchange> getExchanges() {
         RestTemplate template = new RestTemplate();
         ResponseEntity<List<Exchange>> responseEntity = template

@@ -31,7 +31,5 @@ public class CoinFacadeImpl {
         return service.findWithFilters(filterType, value);
     }
 
-    public List<Coin> saveAll() {
-        return service.saveAll();
-    }
+
 }

@@ -5,10 +5,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @ApiModel
-public class Issue {
+public class Issue implements Serializable {
 
     @ApiModelProperty(example = "IllegalStateException")
     private String id;
