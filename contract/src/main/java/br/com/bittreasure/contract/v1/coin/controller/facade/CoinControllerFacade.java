@@ -1,6 +1,7 @@
 package br.com.bittreasure.contract.v1.coin.controller.facade;
 
 import br.com.bittreasure.contract.v1.coin.mapper.CoinMapper;
+import br.com.bittreasure.contract.v1.coin.models.response.CoinExchangesResponse;
 import br.com.bittreasure.contract.v1.coin.models.response.CoinResponse;
 import br.com.bittreasure.contract.v1.coin.models.response.ListCompleteCoinResponse;
 import br.com.bittreasure.contract.v1.coin.models.response.ListSimplifiedCoinResponse;
@@ -37,5 +38,9 @@ public class CoinControllerFacade {
     public ListCompleteCoinResponse findAllComplete() {
         List<Coin> all = facadeImpl.findAll();
         return mapper.mapToListCompleteCoinResponse(all);
+    }
+
+    public CoinExchangesResponse findExchanges(String id) {
+        return mapper.mapToCoinExchangesResponse(facadeImpl.findCoinExchanges(id));
     }
 }

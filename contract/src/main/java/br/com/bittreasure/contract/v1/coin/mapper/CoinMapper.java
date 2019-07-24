@@ -1,13 +1,12 @@
 package br.com.bittreasure.contract.v1.coin.mapper;
 
-import br.com.bittreasure.contract.v1.coin.models.response.CoinResponse;
-import br.com.bittreasure.contract.v1.coin.models.response.ListCompleteCoinResponse;
-import br.com.bittreasure.contract.v1.coin.models.response.ListSimplifiedCoinResponse;
-import br.com.bittreasure.contract.v1.coin.models.response.SimplifiedCoinResponse;
+import br.com.bittreasure.contract.v1.coin.models.response.*;
 import br.com.bittreasure.impl.coin.models.Coin;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CoinMapper {
@@ -42,5 +41,15 @@ public class CoinMapper {
 
     public ListCompleteCoinResponse mapToListCompleteCoinResponse(List<Coin> all) {
         return ListCompleteCoinResponse.builder().coins(all).build();
+    }
+
+    public CoinExchangesResponse mapToCoinExchangesResponse(Coin coin) {
+        return CoinExchangesResponse.builder()
+                .id(coin.getId())
+                .name(coin.getName())
+                .exchanges(coin.getExchanges().stream()
+                        .sorted(String::compareTo).collect(Collectors.toCollection(LinkedHashSet::new))
+                )
+                .build();
     }
 }

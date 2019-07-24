@@ -37,4 +37,7 @@ public class CoinFacadeImpl {
     }
 
 
+    public Coin findCoinExchanges(String id) {
+        return service.find(id);
+    }
 }

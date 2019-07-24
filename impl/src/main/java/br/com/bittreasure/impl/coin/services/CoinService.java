@@ -38,18 +38,29 @@ public class CoinService {
             try {
                 semaphore.acquire();
                 new Thread(() -> {
-                    RestTemplate template = new RestTemplate();
-                    Coin coin = operations.getCoinInformation(c.getId(), template);
-                    operations.setPriceInformations(coin, template);
-                    log.info("Saving coin {}", coin.getName());
-                    repository.save(coin);
-                    semaphore.release();
+                    doSave(semaphore, c);
                 }, "Save coin").start();
             } catch (InterruptedException e) {
                 log.error("InterruptedException: {}", e.getMessage());
                 Thread.currentThread().interrupt();
             }
         });
+    }
+
+    private void doSave(Semaphore semaphore, Coin c) {
+        Coin coin = populateCoin(c);
+        repository.save(coin);
+        semaphore.release();
+    }
+
+    private Coin populateCoin(Coin c) {
+        RestTemplate template = new RestTemplate();
+        Coin coin = operations.getCoinInformation(c.getId(), template);
+        operations.setPriceInformations(coin, template);
+        log.info("Saving coin {}", coin.getName());
+        repository.findById(coin.getId())
+                .ifPresent(coin1 -> coin.setExchanges(coin1.getExchanges()));
+        return coin;
     }
 
     public void updateCoinExchange(String coinId, String exchangeId) {

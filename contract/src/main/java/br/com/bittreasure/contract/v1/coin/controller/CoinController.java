@@ -1,10 +1,7 @@
 package br.com.bittreasure.contract.v1.coin.controller;
 
 import br.com.bittreasure.contract.v1.coin.controller.facade.CoinControllerFacade;
-import br.com.bittreasure.contract.v1.coin.models.response.CoinResponse;
-import br.com.bittreasure.contract.v1.coin.models.response.ListCompleteCoinResponse;
-import br.com.bittreasure.contract.v1.coin.models.response.ListSimplifiedCoinResponse;
-import br.com.bittreasure.contract.v1.coin.models.response.SimplifiedCoinResponse;
+import br.com.bittreasure.contract.v1.coin.models.response.*;
 import br.com.bittreasure.impl.exceptions.errors.ResponseError;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -61,13 +58,13 @@ public class CoinController {
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @GetMapping("/{id}")
-    public CoinResponse find(@ApiParam(value = "Coin id", example = "btc-bitcon", required = true)
-                             @PathVariable("id") String id,
+    public CoinResponse find(@ApiParam(value = "Coin id", example = "btc-bitcoin", required = true)
+                             @PathVariable String id,
 
-                             @ApiParam(value = "CoinFilter by name", example = "BitCoin")
+                             @ApiParam(value = "Name of CoinFilter", example = "rank_less")
                              @RequestParam(required = false) String filter,
 
-                             @ApiParam(value = "Filter value", example = "BitCoin")
+                             @ApiParam(value = "Filter value", example = "10")
                              @RequestParam(required = false) String value) {
         return coinControllerFacade.find(id);
     }
@@ -90,5 +87,19 @@ public class CoinController {
         return coinControllerFacade.findAll(filter, value);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get coin's exchanges", notes = "Get all exchanges that work with given id's coin")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Exchanges retrieved", response = CoinExchangesResponse.class),
+            @ApiResponse(code = 400, message = "Bad request", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Method not allowed", response = ResponseError.class),
+            @ApiResponse(code = 404, message = "Coin not found", response = ResponseError.class),
+            @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
+    })
+    @GetMapping("/{id}/exchanges")
+    public CoinExchangesResponse find(@ApiParam(value = "Coin id", example = "btc-bitcoin", required = true)
+                             @PathVariable String id) {
+        return coinControllerFacade.findExchanges(id);
+    }
 
 }
