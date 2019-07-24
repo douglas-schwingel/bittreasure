@@ -99,4 +99,6 @@ public class CoinServiceTest {
         verify(operations, times(4)).getCoinInformation(anyString(), any(RestTemplate.class));
     }
 
+
+
 }
