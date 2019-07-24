@@ -59,7 +59,7 @@ public class ExchangeController {
             @ApiResponse(code = 404, message = "Coin not found", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
-    @GetMapping("/findAll")
+    @GetMapping("/")
     public ListExchangeResponse findAll() {
         return facade.findAll();
     }

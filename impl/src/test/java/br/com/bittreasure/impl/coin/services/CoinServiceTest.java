@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.springframework.core.env.Environment;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Comparator;
 import java.util.List;
@@ -32,6 +34,8 @@ public class CoinServiceTest {
     @Before
     public void setUp() {
         repository = mock(CoinRepository.class);
+        Environment environment = mock(Environment.class);
+        when(environment.getProperty("api.getCoins")).thenReturn("https://api.coinpaprika.com/v1/coins");
         operations = mock(CoinOperations.class);
         utils = new  CoinTestsUtils();
         service = new CoinService(repository, operations);
@@ -82,13 +86,13 @@ public class CoinServiceTest {
     @Test
     public void shouldGetTheResponseFromCoinpaprika() {
         List<Coin> list = utils.getCoins();
-        when(operations.getCoins()).thenReturn(list);
-        list.forEach(c -> when(operations.getCoinInformation(c.getId())).thenReturn(c));
+        when(operations.getCoins(any(RestTemplate.class))).thenReturn(list);
+        list.forEach(c -> when(operations.getCoinInformation(eq(c.getId()), any())).thenReturn(c));
 
         service.save();
 
-        verify(operations, times(1)).getCoins();
-        list.forEach(c -> verify(operations, times(1)).getCoinInformation(c.getId()));
+        verify(operations, times(1)).getCoins(any());
+        verify(operations, times(4)).getCoinInformation(anyString(), any(RestTemplate.class));
     }
 
 }

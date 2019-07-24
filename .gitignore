@@ -4,6 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
+java_pid25058.hprof
 
 ### STS ###
 .apt_generated

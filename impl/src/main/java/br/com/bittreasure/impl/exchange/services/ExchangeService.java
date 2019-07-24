@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -38,7 +39,7 @@ public class ExchangeService {
                 coinService.updateCoinExchange(m.getBaseCurrencyId(), e.getId());
                 coinService.updateCoinExchange(m.getQuoteCurrencyId(), e.getId());
             });
-            save(e);
+            repository.save(e);
             log.info("Saved exchange {}", e.getName());
         });
     }
@@ -58,15 +59,7 @@ public class ExchangeService {
     public List<Exchange> findAll() {
         List<Exchange> list = new ArrayList<>();
         repository.findAll().forEach(list::add);
-        list.forEach(e -> log.info(e.toString()));
         return list;
     }
-
-    public Exchange save(Exchange exchange) {
-        return repository.save(exchange);
-    }
-
-
-
 
 }

@@ -4,10 +4,7 @@ import br.com.bittreasure.contract.v1.exchange.mapper.ExchangeMapper;
 import br.com.bittreasure.contract.v1.exchange.models.response.ExchangeResponse;
 import br.com.bittreasure.contract.v1.exchange.models.response.ListExchangeResponse;
 import br.com.bittreasure.impl.exchange.facades.ExchangeFacadeImpl;
-import br.com.bittreasure.impl.exchange.models.Exchange;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ExchangeControllerFacade {
@@ -25,8 +22,7 @@ public class ExchangeControllerFacade {
     }
 
     public ListExchangeResponse saveAll() {
-        List<Exchange> exchanges = facade.saveAll();
-        return mapper.mapToListExchangeResponse(exchanges);
+        return mapper.mapToListExchangeResponse(facade.saveAll());
     }
 
     public ListExchangeResponse findAll() {

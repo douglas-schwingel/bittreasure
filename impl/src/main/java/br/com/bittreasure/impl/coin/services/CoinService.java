@@ -10,8 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Semaphore;
 
 @Slf4j
@@ -29,14 +32,15 @@ public class CoinService {
     @Scheduled(fixedRate =  3000)
     public void save() {
         log.info("Initializing save method");
-        List<Coin> coins = operations.getCoins();
-        Semaphore semaphore = new Semaphore(3);
+        RestTemplate template = new RestTemplate();
+        List<Coin> coins = operations.getCoins(template);
+        Semaphore semaphore = new Semaphore(4);
         coins.forEach(c -> {
             try {
                 semaphore.acquire();
                 new Thread(() -> {
-                    Coin coin = operations.getCoinInformation(c.getId());
-                    operations.setPriceInformations(coin);
+                    Coin coin = operations.getCoinInformation(c.getId(), template);
+                    operations.setPriceInformations(coin, template);
                     log.info("Saving coin {}", coin.getName());
                     repository.save(coin);
                     semaphore.release();

@@ -65,10 +65,10 @@ public class CoinController {
                              @PathVariable("id") String id,
 
                              @ApiParam(value = "CoinFilter by name", example = "BitCoin")
-                             @RequestParam("filter") @Nullable String filter,
+                             @RequestParam(required = false) String filter,
 
                              @ApiParam(value = "Filter value", example = "BitCoin")
-                             @RequestParam("value") @Nullable String value) {
+                             @RequestParam(required = false) String value) {
         return coinControllerFacade.find(id);
     }
 
@@ -83,10 +83,10 @@ public class CoinController {
     })
     @GetMapping("/")
     public ListSimplifiedCoinResponse findAll(@ApiParam(value = "CoinFilter by name", example = "BitCoin")
-                             @RequestParam("filter") @Nullable String filter,
+                             @RequestParam(required = false) String filter,
 
                              @ApiParam(value = "Filter value", example = "BitCoin")
-                             @RequestParam("value") @Nullable String value) {
+                             @RequestParam(required = false) @Nullable String value) {
         return coinControllerFacade.findAll(filter, value);
     }
 
