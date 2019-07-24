@@ -18,11 +18,11 @@ import javax.servlet.http.HttpServletRequest;
 public class ExceptionHandlers {
 
     private static final String PT_BR = "pt-BR";
+    private static final String LOG_MESSAGE = "Exception: {}";
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ResponseError> apiException(ApiException exception, HttpServletRequest request) {
-        log.error("ApiException: {}", exception.getMessage());
-        exception.printStackTrace();
+        log.trace(LOG_MESSAGE,exception.getMessage(), exception);
         return ResponseEntity.status(exception.getErrors().get(0).getStatus())
                 .body(new ResponseError(request.getRequestURI(), PT_BR, exception.getErrors()));
     }
@@ -38,14 +38,14 @@ public class ExceptionHandlers {
                 .suggestedUserAction("Contact the developer")
                 .suggestedApplicationAction("This method is not supported here. Contact us")
                 .build();
-        log.error("HttpRequestMethodNotSupportedException: {}", exception.getMessage());
-        exception.printStackTrace();
+        log.trace(LOG_MESSAGE,exception.getMessage(), exception);
         return new ResponseEntity<>(ResponseError.builder()
                 .namespace(request.getRequestURI())
                 .language(PT_BR)
                 .error(error).build()
                 , HttpStatus.METHOD_NOT_ALLOWED);
     }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseError> exception(Exception exception, HttpServletRequest request) {
@@ -58,8 +58,7 @@ public class ExceptionHandlers {
                 .suggestedApplicationAction("Don't do anything.. It's not your fault")
                 .build()
         );
-        log.error("Exception: {}", exception.getMessage());
-        exception.printStackTrace();
+        log.trace(LOG_MESSAGE,exception.getMessage(), exception);
         return ResponseEntity.status(apiException.getErrors().get(0).getStatus())
                 .body(new ResponseError(request.getRequestURI(), PT_BR, apiException.getErrors()));
     }

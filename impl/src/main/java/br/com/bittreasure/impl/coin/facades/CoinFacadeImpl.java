@@ -2,6 +2,7 @@ package br.com.bittreasure.impl.coin.facades;
 
 import br.com.bittreasure.impl.coin.filters.CoinFilter;
 import br.com.bittreasure.impl.coin.filters.models.FilterType;
+import br.com.bittreasure.impl.coin.filters.models.NoFilter;
 import br.com.bittreasure.impl.coin.services.CoinService;
 import br.com.bittreasure.impl.coin.models.Coin;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,10 @@ public class CoinFacadeImpl {
     public List<Coin> findAll(@Nullable String filter, @Nullable String value) {
         FilterType filterType = coinFilter.filtra(filter);
         return service.findWithFilters(filterType, value);
+    }
+
+    public List<Coin> findAll() {
+        return service.findWithFilters(new NoFilter(), "");
     }
 
 

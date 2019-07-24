@@ -2,7 +2,7 @@ package br.com.bittreasure.contract.v1.coin.controller;
 
 import br.com.bittreasure.contract.v1.coin.controller.facade.CoinControllerFacade;
 import br.com.bittreasure.contract.v1.coin.models.response.CoinResponse;
-import br.com.bittreasure.contract.v1.coin.models.response.CompleteCoinResponse;
+import br.com.bittreasure.contract.v1.coin.models.response.ListCompleteCoinResponse;
 import br.com.bittreasure.contract.v1.coin.models.response.ListSimplifiedCoinResponse;
 import br.com.bittreasure.contract.v1.coin.models.response.SimplifiedCoinResponse;
 import br.com.bittreasure.impl.exceptions.errors.ResponseError;
@@ -41,14 +41,14 @@ public class CoinController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get Complete Coins", notes = "Get the complete coin version containing all the informations")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Coins retrivied", response = CompleteCoinResponse.class),
+            @ApiResponse(code = 200, message = "Coins retrivied", response = ListCompleteCoinResponse.class),
             @ApiResponse(code = 403, message = "Method not allowed", response = ResponseError.class),
             @ApiResponse(code = 404, message = "Coins not found", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @GetMapping("/complete")
-    public CompleteCoinResponse getCompleteCoins() {
-        return null;
+    public ListCompleteCoinResponse getCompleteCoins() {
+        return coinControllerFacade.findAllComplete();
     }
 
     @ResponseStatus(HttpStatus.OK)

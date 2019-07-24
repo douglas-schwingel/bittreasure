@@ -6,7 +6,7 @@ import br.com.bittreasure.impl.exceptions.issues.Issue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class MyErrorController implements ErrorController {
 
-    @RequestMapping("/error")
+    @GetMapping("/error")
     public void error(HttpServletRequest request) {
         HttpStatus httpStatus = getStatus(request);
         throw new ApiException(StandartError.builder()

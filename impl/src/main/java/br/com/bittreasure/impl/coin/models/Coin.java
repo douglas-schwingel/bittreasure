@@ -2,10 +2,7 @@ package br.com.bittreasure.impl.coin.models;
 
 import com.couchbase.client.java.repository.annotation.Id;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Singular;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.couchbase.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -15,6 +12,8 @@ import java.util.Set;
 @Document
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 public class Coin {
 

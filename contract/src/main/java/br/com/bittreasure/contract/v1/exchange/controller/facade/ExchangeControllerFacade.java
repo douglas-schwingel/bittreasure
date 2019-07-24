@@ -29,7 +29,7 @@ public class ExchangeControllerFacade {
         return mapper.mapToListExchangeResponse(exchanges);
     }
 
-    public List<Exchange> findAll() {
-        return facade.findAll();
+    public ListExchangeResponse findAll() {
+        return mapper.mapToListExchangeResponse(facade.findAll());
     }
 }

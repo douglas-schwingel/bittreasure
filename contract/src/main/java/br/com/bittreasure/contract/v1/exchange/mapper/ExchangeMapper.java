@@ -1,6 +1,5 @@
 package br.com.bittreasure.contract.v1.exchange.mapper;
 
-import br.com.bittreasure.contract.v1.exchange.models.response.ExchangeCompleteResponse;
 import br.com.bittreasure.contract.v1.exchange.models.response.ExchangeResponse;
 import br.com.bittreasure.contract.v1.exchange.models.response.ListExchangeResponse;
 import br.com.bittreasure.impl.exchange.models.Exchange;
@@ -19,12 +18,6 @@ public class ExchangeMapper {
                 .description(exchange.getDescription())
                 .markets(exchange.getAllMarkets())
                 .build();
-    }
-
-    public ExchangeCompleteResponse mapToExchangeCompleteResponse(List<Exchange> exchanges) {
-        var builder = ExchangeCompleteResponse.builder();
-//        TODO criar uma ExchangeCompleteResponse
-        return builder.build();
     }
 
     public ListExchangeResponse mapToListExchangeResponse(List<Exchange> exchanges) {

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class CoinServiceTest {
@@ -24,6 +24,7 @@ public class CoinServiceTest {
     private CoinRepository repository;
     private CoinService service;
     private CoinOperations operations;
+    private CoinTestsUtils utils;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -32,12 +33,13 @@ public class CoinServiceTest {
     public void setUp() {
         repository = mock(CoinRepository.class);
         operations = mock(CoinOperations.class);
+        utils = new  CoinTestsUtils();
         service = new CoinService(repository, operations);
     }
 
     @Test
     public void shouldReturnTheRightCoin() {
-        Coin coinUtil = CoinTestsUtils.getCoin("btc-bitcoin");
+        Coin coinUtil = utils.getCoin("btc-bitcoin");
         when(repository.findById("btc-bitcoin")).thenReturn(Optional.of(coinUtil));
         Coin coin = service.find("btc-bitcoin");
 
@@ -46,7 +48,7 @@ public class CoinServiceTest {
 
     @Test
     public void shouldReturnOnlyCoinsWithRankGreaterThan10() {
-        List<Coin> filteredCoins = CoinTestsUtils.getCoins().stream()
+        List<Coin> filteredCoins = utils.getCoins().stream()
                 .filter(c -> c.getRank() > 10)
                 .sorted(Comparator.comparingInt(Coin::getRank))
                 .collect(Collectors.toList());
@@ -59,7 +61,7 @@ public class CoinServiceTest {
 
     @Test
     public void shouldReturnOnlyCoinsWithRankLessThen5() {
-        List<Coin> filteredCoins = CoinTestsUtils.getCoins().stream()
+        List<Coin> filteredCoins = utils.getCoins().stream()
                 .filter(c -> c.getRank() < 10)
                 .sorted(Comparator.comparingInt(Coin::getRank))
                 .collect(Collectors.toList());
@@ -79,7 +81,7 @@ public class CoinServiceTest {
 
     @Test
     public void shouldGetTheResponseFromCoinpaprika() {
-        List<Coin> list = CoinTestsUtils.getCoins();
+        List<Coin> list = utils.getCoins();
         when(operations.getCoins()).thenReturn(list);
         list.forEach(c -> when(operations.getCoinInformation(c.getId())).thenReturn(c));
 

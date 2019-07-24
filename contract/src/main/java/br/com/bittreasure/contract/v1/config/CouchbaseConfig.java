@@ -2,6 +2,7 @@ package br.com.bittreasure.contract.v1.config;
 
 import br.com.bittreasure.impl.exchange.models.Exchange;
 import com.couchbase.client.java.Bucket;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
@@ -12,6 +13,7 @@ import org.springframework.data.couchbase.repository.support.IndexManager;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Configuration
 public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
@@ -34,7 +36,7 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
             mapping
                     .mapEntity(Exchange.class, exchangesTemplate());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         super.configureRepositoryOperationsMapping(mapping);
     }
