@@ -2,7 +2,6 @@ package br.com.bittreasure.contract.v1.config;
 
 import br.com.bittreasure.impl.exchange.models.Exchange;
 import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.view.DefaultView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
