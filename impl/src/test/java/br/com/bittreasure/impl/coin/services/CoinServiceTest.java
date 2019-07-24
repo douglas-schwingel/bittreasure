@@ -37,7 +37,7 @@ public class CoinServiceTest {
         Environment environment = mock(Environment.class);
         when(environment.getProperty("api.getCoins")).thenReturn("https://api.coinpaprika.com/v1/coins");
         operations = mock(CoinOperations.class);
-        utils = new  CoinTestsUtils();
+        utils = new CoinTestsUtils();
         service = new CoinService(repository, operations);
     }
 
@@ -90,7 +90,11 @@ public class CoinServiceTest {
         list.forEach(c -> when(operations.getCoinInformation(eq(c.getId()), any())).thenReturn(c));
 
         service.save();
-
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         verify(operations, times(1)).getCoins(any());
         verify(operations, times(4)).getCoinInformation(anyString(), any(RestTemplate.class));
     }

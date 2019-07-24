@@ -29,16 +29,16 @@ public class CoinService {
         this.operations = operations;
     }
 
-    @Scheduled(fixedRate =  3000)
+    @Scheduled(fixedRate = 3000)
     public void save() {
         log.info("Initializing save method");
-        RestTemplate template = new RestTemplate();
-        List<Coin> coins = operations.getCoins(template);
+        List<Coin> coins = operations.getCoins(new RestTemplate());
         Semaphore semaphore = new Semaphore(4);
         coins.forEach(c -> {
             try {
                 semaphore.acquire();
                 new Thread(() -> {
+                    RestTemplate template = new RestTemplate();
                     Coin coin = operations.getCoinInformation(c.getId(), template);
                     operations.setPriceInformations(coin, template);
                     log.info("Saving coin {}", coin.getName());
