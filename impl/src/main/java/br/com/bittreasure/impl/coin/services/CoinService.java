@@ -30,21 +30,20 @@ public class CoinService {
     }
 
     @Scheduled(fixedRate = 3000)
-    public void save() {
+    public List<Coin> save() {
         log.info("Initializing save method");
         List<Coin> coins = operations.getCoins(new RestTemplate());
         Semaphore semaphore = new Semaphore(4);
         coins.forEach(c -> {
             try {
                 semaphore.acquire();
-                new Thread(() -> {
-                    doSave(semaphore, c);
-                }, "Save coin").start();
+                new Thread(() -> doSave(semaphore, c), "Save coin").start();
             } catch (InterruptedException e) {
                 log.error("InterruptedException: {}", e.getMessage());
                 Thread.currentThread().interrupt();
             }
         });
+        return coins;
     }
 
     private void doSave(Semaphore semaphore, Coin c) {

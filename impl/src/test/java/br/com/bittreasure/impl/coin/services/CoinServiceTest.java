@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -33,7 +34,7 @@ public class CoinServiceTest {
 
     @Before
     public void setUp() {
-        repository = mock(CoinRepository.class);
+        repository = spy(CoinRepository.class);
         Environment environment = mock(Environment.class);
         when(environment.getProperty("api.getCoins")).thenReturn("https://api.coinpaprika.com/v1/coins");
         operations = mock(CoinOperations.class);
@@ -89,16 +90,10 @@ public class CoinServiceTest {
         when(operations.getCoins(any(RestTemplate.class))).thenReturn(list);
         list.forEach(c -> when(operations.getCoinInformation(eq(c.getId()), any())).thenReturn(c));
 
-        service.save();
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        await().until(service::save, coins -> coins.size() == 4);
+
         verify(operations, times(1)).getCoins(any());
         verify(operations, times(4)).getCoinInformation(anyString(), any(RestTemplate.class));
     }
-
-
 
 }
