@@ -9,6 +9,15 @@ BitTreasure API based on CoinPaprika
 With docker:
 `docker run -d --network host dschwingel/mycouchbase `
 
+Accessing couchbase:
+
+> http://localhost:8091/
+
+username: admin
+password: localhost
+
+------------
+
 #### Contract page
 > http://localhost:8080/swagger-ui.html
 
