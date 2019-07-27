@@ -79,10 +79,10 @@ public class CoinController {
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @GetMapping("/")
-    public ListSimplifiedCoinResponse findAll(@ApiParam(value = "CoinFilter by name", example = "BitCoin")
+    public ListSimplifiedCoinResponse findAll(@ApiParam(value = "CoinFilter by name", example = "rank_less")
                              @RequestParam(required = false) String filter,
 
-                             @ApiParam(value = "Filter value", example = "BitCoin")
+                             @ApiParam(value = "Filter value", example = "10")
                              @RequestParam(required = false) @Nullable String value) {
         return coinControllerFacade.findAll(filter, value);
     }

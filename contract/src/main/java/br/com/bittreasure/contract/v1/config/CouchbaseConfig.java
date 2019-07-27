@@ -19,7 +19,7 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
     @Bean
     public Bucket exchangesBucket() throws Exception {
-        return couchbaseCluster().openBucket("exchanges", "123456");
+        return couchbaseCluster().openBucket("exchanges", "localhost");
     }
 
     @Bean
@@ -52,7 +52,7 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
     @Override
     protected String getBucketPassword() {
-        return "123456";
+        return "localhost";
     }
 
     @Override
