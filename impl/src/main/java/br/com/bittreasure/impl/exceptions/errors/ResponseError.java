@@ -22,5 +22,4 @@ public class ResponseError implements Serializable {
     private List<StandartError> errors;
 
 
-
 }

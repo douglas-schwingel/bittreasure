@@ -7,6 +7,7 @@ import br.com.bittreasure.contract.v1.coin.models.response.ListCompleteCoinRespo
 import br.com.bittreasure.contract.v1.coin.models.response.ListSimplifiedCoinResponse;
 import br.com.bittreasure.impl.coin.facades.CoinFacadeImpl;
 import br.com.bittreasure.impl.coin.models.Coin;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -14,33 +15,27 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class CoinControllerFacade {
 
-    private CoinFacadeImpl facadeImpl;
-    private CoinMapper mapper;
-
-    public CoinControllerFacade(CoinFacadeImpl facadeImpl, CoinMapper mapper) {
-        this.facadeImpl = facadeImpl;
-        this.mapper = mapper;
-    }
-
+    private final CoinFacadeImpl facadeImpl;
 
     public CoinResponse find(String id) {
-        return mapper.mapToCoinResponse(facadeImpl.find(id));
+        return CoinMapper.mapToCoinResponse(facadeImpl.find(id));
     }
 
-    public ListSimplifiedCoinResponse findAll(@Nullable String filter, @Nullable  String value) {
+    public ListSimplifiedCoinResponse findAll(@Nullable String filter, @Nullable String value) {
         List<Coin> list = facadeImpl.findAll(filter, value);
-        return mapper.mapToListSimplifiedCoinResponse(list);
+        return CoinMapper.mapToListSimplifiedCoinResponse(list);
     }
 
     public ListCompleteCoinResponse findAllComplete() {
         List<Coin> all = facadeImpl.findAll();
-        return mapper.mapToListCompleteCoinResponse(all);
+        return CoinMapper.mapToListCompleteCoinResponse(all);
     }
 
     public CoinExchangesResponse findExchanges(String id) {
-        return mapper.mapToCoinExchangesResponse(facadeImpl.findCoinExchanges(id));
+        return CoinMapper.mapToCoinExchangesResponse(facadeImpl.findCoinExchanges(id));
     }
 }

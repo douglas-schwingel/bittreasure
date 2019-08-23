@@ -5,6 +5,7 @@ import br.com.bittreasure.impl.coin.filters.models.FilterType;
 import br.com.bittreasure.impl.coin.filters.models.NoFilter;
 import br.com.bittreasure.impl.coin.services.CoinService;
 import br.com.bittreasure.impl.coin.models.Coin;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -13,15 +14,11 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CoinFacadeImpl {
 
-    private CoinService service;
+    private final CoinService service;
     private final CoinFilter coinFilter;
-
-    public CoinFacadeImpl(CoinService service, CoinFilter filter) {
-        this.service = service;
-        this.coinFilter = filter;
-    }
 
     public Coin find(String id) {
         return service.find(id);

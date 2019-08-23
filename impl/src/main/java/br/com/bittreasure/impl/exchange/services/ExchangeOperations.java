@@ -2,6 +2,8 @@ package br.com.bittreasure.impl.exchange.services;
 
 import br.com.bittreasure.impl.exchange.models.Exchange;
 import br.com.bittreasure.impl.exchange.models.Market;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -9,11 +11,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-public class ExchangeOperations {
-
-    private ExchangeOperations() {
-
-    }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+class ExchangeOperations {
 
     static List<Exchange> getExchanges() {
         RestTemplate template = new RestTemplate();

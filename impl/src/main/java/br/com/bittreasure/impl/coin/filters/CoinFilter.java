@@ -23,13 +23,13 @@ public class CoinFilter {
 
         } catch (IllegalArgumentException e) {
             throw new ApiException(StandartError.builder()
-                            .message("Invalid filter")
-                            .status(HttpStatus.BAD_REQUEST.value())
-                            .name(HttpStatus.BAD_REQUEST.name())
-                            .issue(new Issue(e))
-                            .suggestedUserAction("Please, verify the filter name and try again")
-                            .suggestedApplicationAction("Don't do anything.. It's not your fault")
-                            .build()
+                    .message("Invalid filter")
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .name(HttpStatus.BAD_REQUEST.name())
+                    .issue(new Issue(e))
+                    .suggestedUserAction("Please, verify the filter name and try again")
+                    .suggestedApplicationAction("Don't do anything.. It's not your fault")
+                    .build()
             );
         } catch (NullPointerException e) {
             log.info("Filter and/or value is null");

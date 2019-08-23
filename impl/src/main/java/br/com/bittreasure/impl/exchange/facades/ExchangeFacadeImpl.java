@@ -3,6 +3,7 @@ package br.com.bittreasure.impl.exchange.facades;
 import br.com.bittreasure.impl.coin.services.CoinService;
 import br.com.bittreasure.impl.exchange.models.Exchange;
 import br.com.bittreasure.impl.exchange.services.ExchangeService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -10,15 +11,11 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ExchangeFacadeImpl {
 
     private final ExchangeService service;
     private final CoinService coinService;
-
-    public ExchangeFacadeImpl(ExchangeService service, CoinService coinService) {
-        this.service = service;
-        this.coinService = coinService;
-    }
 
     public Exchange find(String id) {
         return service.find(id);
@@ -33,8 +30,6 @@ public class ExchangeFacadeImpl {
         service.updateMarkets(exchanges, coinService);
         return exchanges;
     }
-
-
 
 
 }

@@ -11,14 +11,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.springframework.core.env.Environment;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -26,7 +24,6 @@ public class CoinServiceTest {
 
     private CoinRepository repository;
     private CoinService service;
-    private CoinOperations operations;
     private CoinTestsUtils utils;
 
     @Rule
@@ -37,7 +34,7 @@ public class CoinServiceTest {
         repository = spy(CoinRepository.class);
         Environment environment = mock(Environment.class);
         when(environment.getProperty("api.getCoins")).thenReturn("https://api.coinpaprika.com/v1/coins");
-        operations = mock(CoinOperations.class);
+        CoinOperations operations = mock(CoinOperations.class);
         utils = new CoinTestsUtils();
         service = new CoinService(repository, operations);
     }
@@ -82,18 +79,6 @@ public class CoinServiceTest {
         expectedException.expect(ApiException.class);
         expectedException.expectMessage("No coin with this id");
         service.find("any");
-    }
-
-    @Test
-    public void shouldGetTheResponseFromCoinpaprika() {
-        List<Coin> list = utils.getCoins();
-        when(operations.getCoins(any(RestTemplate.class))).thenReturn(list);
-        list.forEach(c -> when(operations.getCoinInformation(eq(c.getId()), any())).thenReturn(c));
-
-        await().until(service::save, coins -> coins.size() == 4);
-
-        verify(operations, times(1)).getCoins(any());
-        verify(operations, times(4)).getCoinInformation(anyString(), any(RestTemplate.class));
     }
 
 }

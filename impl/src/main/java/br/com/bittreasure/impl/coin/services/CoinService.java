@@ -6,6 +6,7 @@ import br.com.bittreasure.impl.coin.repositories.CoinRepository;
 import br.com.bittreasure.impl.exceptions.ApiException;
 import br.com.bittreasure.impl.exceptions.errors.StandartError;
 import br.com.bittreasure.impl.exceptions.issues.Issue;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,18 +20,14 @@ import java.util.concurrent.Semaphore;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CoinService {
 
     private final CoinRepository repository;
-    private CoinOperations operations;
-
-    public CoinService(CoinRepository repository, CoinOperations operations) {
-        this.repository = repository;
-        this.operations = operations;
-    }
+    private final CoinOperations operations;
 
     @Scheduled(fixedRate = 3000)
-    public List<Coin> save() {
+    public void save() {
         log.info("Initializing save method");
         List<Coin> coins = operations.getCoins(new RestTemplate());
         Semaphore semaphore = new Semaphore(4);
@@ -43,7 +40,7 @@ public class CoinService {
                 Thread.currentThread().interrupt();
             }
         });
-        return coins;
+//        return coins;
     }
 
     private void doSave(Semaphore semaphore, Coin c) {

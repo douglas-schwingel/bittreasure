@@ -7,6 +7,7 @@ import br.com.bittreasure.impl.exceptions.issues.Issue;
 import br.com.bittreasure.impl.exchange.models.Exchange;
 import br.com.bittreasure.impl.exchange.models.Market;
 import br.com.bittreasure.impl.exchange.repositories.ExchangeRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,10 @@ import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ExchangeService {
 
     private final ExchangeRepository repository;
-
-    public ExchangeService(ExchangeRepository repository) {
-        this.repository = repository;
-    }
 
     public List<Exchange> getExchangesInformation() {
         return ExchangeOperations.getExchanges();

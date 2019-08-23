@@ -58,10 +58,10 @@ public class CoinOperations {
         for (int i = 0; i < 5; i++) {
             try {
                 ResponseEntity<Coin> responseEntity = template.exchange(apiUri + id, HttpMethod.GET,
-                    null, new ParameterizedTypeReference<Coin>() {
-                    });
+                        null, new ParameterizedTypeReference<Coin>() {
+                        });
                 return responseEntity.getBody();
-        } catch (HttpClientErrorException e) {
+            } catch (HttpClientErrorException e) {
                 log.warn("Get information: {}", e.getMessage());
                 if (i == 4) throw getApiException(e);
             }
@@ -70,21 +70,21 @@ public class CoinOperations {
     }
 
     void setPriceInformations(Coin coin, RestTemplate template) {
-            for (int i = 0; i < 5; i++) {
-                try {
-            ResponseEntity<Coin[]> responseEntity = template.exchange(
-                    apiUri + coin.getId() + "/ohlcv/latest/", HttpMethod.GET,
-                    null, new ParameterizedTypeReference<Coin[]>() {
-                    });
-            Coin body = Objects.requireNonNull(responseEntity.getBody())[0];
-            setCoinInformations(coin, body);
-        } catch (IndexOutOfBoundsException e) {
-            log.warn("Error trying to add price to {}: Coin doesn't have a price", coin.getId());
-        } catch (HttpClientErrorException | ResourceAccessException e) {
-                    log.warn("Set price: {}", e.getMessage());
-                    if (i == 4) throw getApiException(e);
-                }
+        for (int i = 0; i < 5; i++) {
+            try {
+                ResponseEntity<Coin[]> responseEntity = template.exchange(
+                        apiUri + coin.getId() + "/ohlcv/latest/", HttpMethod.GET,
+                        null, new ParameterizedTypeReference<Coin[]>() {
+                        });
+                Coin body = Objects.requireNonNull(responseEntity.getBody())[0];
+                setCoinInformations(coin, body);
+            } catch (IndexOutOfBoundsException e) {
+                log.warn("Error trying to add price to {}: Coin doesn't have a price", coin.getId());
+            } catch (HttpClientErrorException | ResourceAccessException e) {
+                log.warn("Set price: {}", e.getMessage());
+                if (i == 4) throw getApiException(e);
             }
+        }
     }
 
     private void setCoinInformations(Coin coin, Coin body) {
